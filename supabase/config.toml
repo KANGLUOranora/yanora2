@@ -1,0 +1,20 @@
+﻿# Supabase Configuration
+[project]
+# Replace with your actual project ID from Supabase Dashboard
+project_id = "beyffehuectrpknhtpez"
+
+# Edge Functions Configuration
+[functions.create-paypal-order]
+verify_jwt = false
+
+[functions.capture-paypal-order]
+verify_jwt = false
+
+[functions.send-booking-confirmation]
+verify_jwt = false
+
+[functions.create-stripe-payment]
+verify_jwt = false
+
+[functions.create-super-admin]
+verify_jwt = false
