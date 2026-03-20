@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { LogOut, Calendar, Image, Users, HelpCircle, MessageSquare, FileImage, Shield, Images } from 'lucide-react';
+import { LogOut, Calendar, Image, Users, HelpCircle, MessageSquare, FileImage, Shield, Images, BarChart3 } from 'lucide-react';
 import BookingManagement from './BookingManagement';
 import CaseStudyManagement from './CaseStudyManagement';
 import DetailedCaseManagement from './DetailedCaseManagement';
@@ -10,6 +10,7 @@ import FAQManagement from './FAQManagement';
 import TestimonialManagement from './TestimonialManagement';
 import CustomerManagement from './CustomerManagement';
 import AdminManagement from './AdminManagement';
+import AnalyticsManagement from './AnalyticsManagement';
 
 interface Admin {
   id: string;
@@ -17,13 +18,13 @@ interface Admin {
   role: string;
 }
 
-type TabType = 'bookings' | 'cases' | 'detailed-cases' | 'case-comparisons' | 'customers' | 'faqs' | 'testimonials' | 'admins';
+type TabType = 'analytics' | 'bookings' | 'cases' | 'detailed-cases' | 'case-comparisons' | 'customers' | 'faqs' | 'testimonials' | 'admins';
 
 function AdminDashboard() {
   const navigate = useNavigate();
   const [admin, setAdmin] = useState<Admin | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<TabType>('bookings');
+  const [activeTab, setActiveTab] = useState<TabType>('analytics');
 
   useEffect(() => {
     checkAdminAuth();
@@ -99,6 +100,17 @@ function AdminDashboard() {
       <div className="flex">
         <aside className="w-64 border-r min-h-screen" style={{borderColor: '#E5E7EB', backgroundColor: '#F9FAFB'}}>
           <nav className="p-4 space-y-2">
+            <button
+              onClick={() => setActiveTab('analytics')}
+              className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition ${
+                activeTab === 'analytics' ? 'bg-white shadow-sm' : ''
+              }`}
+              style={{color: activeTab === 'analytics' ? '#1F1F1F' : '#6B7280'}}
+            >
+              <BarChart3 className="w-5 h-5" />
+              访问统计
+            </button>
+
             <button
               onClick={() => setActiveTab('bookings')}
               className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition ${
@@ -192,6 +204,7 @@ function AdminDashboard() {
         </aside>
 
         <main className="flex-1 p-8">
+          {activeTab === 'analytics' && <AnalyticsManagement />}
           {activeTab === 'bookings' && <BookingManagement />}
           {activeTab === 'cases' && <CaseStudyManagement />}
           {activeTab === 'detailed-cases' && <DetailedCaseManagement />}
