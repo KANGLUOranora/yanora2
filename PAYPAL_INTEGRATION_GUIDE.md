@@ -12,8 +12,7 @@
 - `supabase/functions/capture-paypal-order/index.ts` - 捕获/完成支付
 
 ### ✅ 3. 环境变量
-- PayPal Client ID: `AX7u87tgzrtr5eX-3EaNPeg0aggC7Jw3bvFrS8UvFOYwYFAHFBj4F05312RYIKfv3yEvm4R6f9hFeg9T`
-- PayPal Secret: `ECZwxyNUG9FEPHTNC0_Zr-QmRZltWKYIT6_gwtVfawqPM1cUQuLED4Vg9k8vXkEX_3q6ScM2UtgXfrNz`
+
 
 ## 需要完成的步骤
 
