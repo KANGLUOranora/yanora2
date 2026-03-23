@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { LogOut, Calendar, Image, Users, HelpCircle, MessageSquare, FileImage, Shield, Images, BarChart3 } from 'lucide-react';
+import { LogOut, Calendar, Image, Users, HelpCircle, MessageSquare, FileImage, Shield, Images, BarChart3, Activity } from 'lucide-react';
 import BookingManagement from './BookingManagement';
 import CaseStudyManagement from './CaseStudyManagement';
 import DetailedCaseManagement from './DetailedCaseManagement';
@@ -11,6 +11,7 @@ import TestimonialManagement from './TestimonialManagement';
 import CustomerManagement from './CustomerManagement';
 import AdminManagement from './AdminManagement';
 import AnalyticsManagement from './AnalyticsManagement';
+import VisitorAnalyticsManagement from './VisitorAnalyticsManagement';
 
 interface Admin {
   id: string;
@@ -18,7 +19,7 @@ interface Admin {
   role: string;
 }
 
-type TabType = 'analytics' | 'bookings' | 'cases' | 'detailed-cases' | 'case-comparisons' | 'customers' | 'faqs' | 'testimonials' | 'admins';
+type TabType = 'analytics' | 'visitor-analytics' | 'bookings' | 'cases' | 'detailed-cases' | 'case-comparisons' | 'customers' | 'faqs' | 'testimonials' | 'admins';
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -109,6 +110,17 @@ function AdminDashboard() {
             >
               <BarChart3 className="w-5 h-5" />
               访问统计
+            </button>
+
+            <button
+              onClick={() => setActiveTab('visitor-analytics')}
+              className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition ${
+                activeTab === 'visitor-analytics' ? 'bg-white shadow-sm' : ''
+              }`}
+              style={{color: activeTab === 'visitor-analytics' ? '#1F1F1F' : '#6B7280'}}
+            >
+              <Activity className="w-5 h-5" />
+              访客行为分析
             </button>
 
             <button
@@ -205,6 +217,7 @@ function AdminDashboard() {
 
         <main className="flex-1 p-8">
           {activeTab === 'analytics' && <AnalyticsManagement />}
+          {activeTab === 'visitor-analytics' && <VisitorAnalyticsManagement />}
           {activeTab === 'bookings' && <BookingManagement />}
           {activeTab === 'cases' && <CaseStudyManagement />}
           {activeTab === 'detailed-cases' && <DetailedCaseManagement />}

@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { LanguageProvider } from './contexts/LanguageContext.tsx';
 import { AuthProvider } from './contexts/AuthContext.tsx';
 import { AnalyticsProvider } from './contexts/AnalyticsContext.tsx';
+import { VisitorTrackingProvider } from './contexts/VisitorTrackingContext.tsx';
 import App from './App.tsx';
 import BookingPage from './components/BookingPage.tsx';
 import PaymentPage from './components/PaymentPage.tsx';
@@ -30,9 +31,10 @@ createRoot(document.getElementById('root')!).render(
     <AuthProvider>
       <LanguageProvider>
         <BrowserRouter>
-          <AnalyticsProvider>
-            <ScrollToTop />
-            <Routes>
+          <VisitorTrackingProvider>
+            <AnalyticsProvider>
+              <ScrollToTop />
+              <Routes>
             <Route path="/" element={<App />} />
             <Route path="/booking" element={<BookingPage />} />
             <Route path="/payment" element={<PaymentPage />} />
@@ -55,7 +57,8 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/after-sales" element={<AfterSalesPage />} />
             <Route path="/card-demo" element={<CardDemo />} />
             </Routes>
-          </AnalyticsProvider>
+            </AnalyticsProvider>
+          </VisitorTrackingProvider>
         </BrowserRouter>
       </LanguageProvider>
     </AuthProvider>
