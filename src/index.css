@@ -8272,6 +8272,59 @@
   display: none !important;
 }
 
+/* Remove decorative grid backgrounds from home and booking pages. */
+.yanora-priority-section,
+.yanora-order-section,
+.yanora-analysis-unified-section,
+.yanora-plan-section,
+.yanora-concerns-section,
+.yanora-real-cases-section,
+.yanora-testimonials-section,
+.yanora-journey-section,
+.yanora-booking-page {
+  background-image: none !important;
+}
+
+.yanora-priority-section {
+  background: linear-gradient(180deg, #ffffff 0%, #f7f9fa 52%, #edf3f6 100%) !important;
+}
+
+.yanora-order-section,
+.yanora-analysis-unified-section,
+.yanora-plan-section,
+.yanora-concerns-section,
+.yanora-real-cases-section,
+.yanora-testimonials-section {
+  background: linear-gradient(180deg, #ffffff 0%, #f7fafc 100%) !important;
+}
+
+.yanora-journey-section,
+.yanora-booking-page {
+  background:
+    radial-gradient(circle at 88% 14%, rgba(185,203,220,0.28), transparent 32%),
+    linear-gradient(180deg, #ffffff 0%, #f6fafc 46%, #eaf3f8 100%) !important;
+  background-size: auto !important;
+}
+
+.yanora-priority-visual-grid,
+.yanora-order-grid,
+.yanora-panel-grid,
+.yanora-advantages-section::before,
+.yanora-plan-section::before,
+.yanora-real-cases-section::before,
+.yanora-journey-section::before {
+  display: none !important;
+  background: none !important;
+  background-image: none !important;
+}
+
+.yanora-advantages-panel {
+  background:
+    radial-gradient(circle at 86% 12%, rgba(185,203,220,0.18), transparent 30%),
+    linear-gradient(135deg, rgba(255,255,255,0.94), rgba(245,248,250,0.86)) !important;
+  background-size: auto !important;
+}
+
 .yanora-hospital-page-v4 {
   --hospital-v4-ink: #182635;
   --hospital-v4-text: #344453;

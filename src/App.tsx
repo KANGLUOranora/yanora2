@@ -1065,8 +1065,7 @@ function App() {
             className="yanora-advantages-panel relative overflow-hidden border p-4 md:p-8 lg:p-10"
             style={{
               borderColor: '#DDE5EC',
-              backgroundImage: 'linear-gradient(rgba(28,43,58,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(28,43,58,0.035) 1px, transparent 1px)',
-              backgroundSize: '40px 40px'
+              backgroundColor: '#F7FAFC'
             }}
           >
             <div className="absolute left-[38%] top-8 bottom-8 hidden lg:block w-px" style={{backgroundColor: '#DDE5EC'}}></div>
@@ -1110,10 +1109,6 @@ function App() {
 
               <AnimatedSection animation="fade-up" delay={180}>
                 <div className="yanora-face-first-panel relative overflow-hidden min-h-[560px] p-6 md:p-8 lg:p-10" style={{backgroundColor: '#1C2B3A'}}>
-                  <div className="absolute inset-0 opacity-25" style={{
-                    backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)',
-                    backgroundSize: '44px 44px'
-                  }}></div>
                   <div className="absolute right-8 top-8 text-[7rem] md:text-[10rem] font-serif italic leading-none select-none" style={{color: 'rgba(255,255,255,0.045)'}}>Y</div>
 
                   <div className="relative z-10">
