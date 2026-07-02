@@ -1,5 +1,5 @@
-import { Calendar, X } from 'lucide-react';
-import { BookingFormData, BookingStep } from '../BookingPage';
+import { ArrowLeft, Calendar, X } from 'lucide-react';
+import { BookingFlowStep, BookingFormData, BookingServiceOption, BookingStep } from '../BookingPage';
 import { useState } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import Footer from '../Footer';
@@ -9,10 +9,19 @@ interface BookingMobileProps {
   formData: BookingFormData;
   loading: boolean;
   error: string;
+  flowStep: BookingFlowStep;
   handleSubmit: (e: React.FormEvent) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
   handlePayment: (method: string) => void;
   navigate: (path: string) => void;
+  facePhotos: File[];
+  facePhotoPreviews: string[];
+  handlePhotoChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleContinueToDetails: () => void;
+  handleBackToPhotos: () => void;
+  serviceOptions: BookingServiceOption[];
+  toggleService: (id: string) => void;
+  totalAmount: number;
 }
 
 const countryCodes = [
@@ -196,12 +205,21 @@ function BookingMobile({
   formData,
   loading,
   error,
+  flowStep,
   handleSubmit,
   handleChange,
   handlePayment,
-  navigate
+  navigate,
+  facePhotos,
+  facePhotoPreviews,
+  handlePhotoChange,
+  handleContinueToDetails,
+  handleBackToPhotos,
+  serviceOptions,
+  toggleService,
+  totalAmount
 }: BookingMobileProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [countryCode, setCountryCode] = useState('+86');
   const [phoneNumber, setPhoneNumber] = useState('');
 
@@ -230,14 +248,14 @@ function BookingMobile({
   };
 
   return (
-    <div className="min-h-screen relative" style={{backgroundColor: '#F5F3F0'}}>
+    <div className="min-h-screen relative yanora-booking-page yanora-booking-mobile" style={{backgroundColor: '#F5F3F0'}}>
       <div className="fixed bottom-6 right-6 z-10">
         <span className="text-6xl font-light tracking-wider opacity-20" style={{color: '#1F1F1F'}}>
           YANORA
         </span>
       </div>
 
-      <nav className="sticky top-0 z-50 py-4" style={{backgroundColor: '#F5F3F0'}}>
+      <nav className="sticky top-0 z-50 py-4 yanora-booking-nav" style={{backgroundColor: '#F5F3F0'}}>
         <div className="px-4 flex items-center justify-between">
           <button
             onClick={() => navigate('/')}
@@ -254,14 +272,14 @@ function BookingMobile({
         </div>
       </nav>
 
-      <section className="py-6 px-4 pb-20">
+      <section className="py-6 px-4 pb-20 yanora-booking-section">
         <div className="max-w-2xl mx-auto">
           {step === 'form' && (
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h1 className="text-2xl font-light text-center mb-3 tracking-wide" style={{color: '#1F1F1F'}}>
+            <div className="bg-white rounded-2xl shadow-lg p-6 yanora-booking-shell">
+              <h1 className="text-2xl font-light text-center mb-3 tracking-wide yanora-booking-title" style={{color: '#1F1F1F'}}>
                 {t('booking.title')}
               </h1>
-              <p className="text-center mb-6 text-xs tracking-wide" style={{color: '#6B7280'}}>
+              <p className="text-center mb-6 text-xs tracking-wide yanora-booking-subtitle" style={{color: '#6B7280'}}>
                 {t('booking.subtitle')}
               </p>
 
@@ -271,9 +289,133 @@ function BookingMobile({
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
+              <div className={`space-y-4 mb-6 yanora-booking-flow yanora-booking-slider ${flowStep === 'details' ? 'yanora-booking-slider-details' : 'yanora-booking-slider-photos'}`}>
+                <div className="border rounded-xl p-4 yanora-booking-step-card yanora-booking-photo-card" style={{borderColor: '#DDE6EE', backgroundColor: '#F7FAFC'}}>
+                  <div className="flex items-center justify-between mb-3">
+                    <div>
+                      <span className="text-[10px] tracking-[0.22em]" style={{color: '#6F8998'}}>STEP 01</span>
+                      <h2 className="text-lg font-light mt-1" style={{color: '#1C2B3A'}}>
+                        {language === 'zh' ? '先上传面部照片' : 'Upload Face Photos'}
+                      </h2>
+                    </div>
+                    <span className="text-xs" style={{color: '#6F8998'}}>{facePhotos.length}/3</span>
+                  </div>
+                  <label className="block cursor-pointer">
+                    <input type="file" accept="image/*" multiple className="hidden" onChange={handlePhotoChange} />
+                    <div className="grid grid-cols-3 gap-2 yanora-booking-photo-grid">
+                      {[
+                        language === 'zh' ? '正面' : 'Front',
+                        language === 'zh' ? '左 45°' : 'Left 45°',
+                        language === 'zh' ? '右 45°' : 'Right 45°'
+                      ].map((item, index) => (
+                        <div
+                          key={item}
+                          className={`h-24 border border-dashed rounded-lg flex flex-col items-center justify-center gap-2 bg-white yanora-booking-photo-slot${facePhotoPreviews[index] ? ' yanora-booking-photo-slot-filled' : ''}`}
+                          style={{borderColor: index < facePhotos.length ? '#1C2B3A' : '#B9CBDC'}}
+                        >
+                          {facePhotoPreviews[index] ? (
+                            <img src={facePhotoPreviews[index]} alt={item} className="yanora-booking-photo-preview" />
+                          ) : (
+                            <span className="w-8 h-8 rounded-full border flex items-center justify-center text-base font-light" style={{borderColor: '#B9CBDC', color: '#6F8998'}}>
+                              +
+                            </span>
+                          )}
+                          <span className="text-[11px] tracking-wide" style={{color: '#1C2B3A'}}>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </label>
+                  <p className="mt-3 text-xs leading-5" style={{color: '#5D6D7E'}}>
+                    {language === 'zh'
+                      ? '上传三张角度照片，帮助我们先判断比例、支撑和轮廓转折。'
+                      : 'Upload three angles so we can read proportion, support, and contour first.'}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleContinueToDetails}
+                  disabled={facePhotos.length < 3}
+                  className="w-full py-3 text-white text-xs font-light tracking-wider disabled:opacity-40 rounded-lg yanora-booking-primary-action"
+                  style={{backgroundColor: '#1C2B3A'}}
+                >
+                  {language === 'zh' ? '完成照片上传，继续填写信息' : 'Continue to Information'}
+                </button>
+
+                <div className="border rounded-xl p-4 bg-white yanora-booking-price-panel" style={{borderColor: '#DDE6EE'}}>
+                  <div className="flex items-end justify-between mb-3">
+                    <div>
+                      <span className="text-[10px] tracking-[0.22em]" style={{color: '#6F8998'}}>
+                        {language === 'zh' ? '费用预览' : 'PRICE PREVIEW'}
+                      </span>
+                      <h2 className="text-lg font-light mt-1" style={{color: '#1C2B3A'}}>
+                        {language === 'zh' ? '选择分析项目' : 'Choose Analysis'}
+                      </h2>
+                    </div>
+                    <strong className="text-2xl font-light" style={{color: '#1C2B3A'}}>${totalAmount}</strong>
+                  </div>
+                  <div className="space-y-2">
+                    {serviceOptions.map((service) => (
+                      <button
+                        key={service.id}
+                        type="button"
+                        onClick={() => toggleService(service.id)}
+                        className="w-full border rounded-lg p-3 text-left transition flex gap-3 items-start yanora-booking-service-card"
+                        style={{
+                          borderColor: service.selected ? '#1C2B3A' : '#E5E7EB',
+                          backgroundColor: service.selected ? '#F5F8FA' : '#FFFFFF'
+                        }}
+                      >
+                        <span
+                          className="mt-0.5 w-5 h-5 border flex items-center justify-center text-xs"
+                          style={{
+                            borderColor: service.selected ? '#1C2B3A' : '#B9CBDC',
+                            color: service.selected ? '#1C2B3A' : 'transparent'
+                          }}
+                        >
+                          ✓
+                        </span>
+                        <span className="flex-1 min-w-0">
+                          <span className="flex items-center justify-between gap-3">
+                            <span className="text-xs tracking-wide" style={{color: '#1C2B3A'}}>
+                              {language === 'zh' ? service.name : service.nameEn}
+                            </span>
+                            <span className="text-sm font-light" style={{color: '#1C2B3A'}}>${service.price}</span>
+                          </span>
+                          <span className="block mt-1 text-[11px] leading-4" style={{color: '#6B7280'}}>
+                            {language === 'zh' ? service.description : service.descriptionEn}
+                          </span>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="yanora-booking-step-heading-hidden" style={{display: flowStep === 'details' ? 'block' : 'none'}}>
+                  <span className="text-[10px] tracking-[0.22em]" style={{color: '#6F8998'}}>STEP 02</span>
+                  <h2 className="text-lg font-light mt-1" style={{color: '#1C2B3A'}}>
+                    {language === 'zh' ? '填写联系信息' : 'Fill In Your Information'}
+                  </h2>
+                </div>
+              </div>
+
+              <form onSubmit={handleSubmit} className={flowStep === 'details' ? 'space-y-5 yanora-booking-form-card yanora-booking-slide-form' : 'hidden'}>
+                <button
+                  type="button"
+                  onClick={handleBackToPhotos}
+                  className="yanora-booking-back-button"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  {language === 'zh' ? '返回上传照片' : 'Back to Photos'}
+                </button>
+                <div className="yanora-booking-details-head">
+                  <span className="text-[10px] tracking-[0.22em]" style={{color: '#6F8998'}}>STEP 02</span>
+                  <h2 className="text-lg font-light mt-1" style={{color: '#1C2B3A'}}>
+                    {language === 'zh' ? '填写联系信息' : 'Fill In Your Information'}
+                  </h2>
+                </div>
+                <div className="grid grid-cols-2 gap-3 yanora-booking-details-name-grid">
+                  <div className="yanora-booking-field">
                     <label className="block text-xs font-normal mb-2 tracking-wide" style={{color: '#1F1F1F'}}>
                       {t('booking.lastName')} <span style={{color: '#EF4444'}}>{t('booking.required')}</span>
                     </label>
@@ -288,7 +430,7 @@ function BookingMobile({
                       placeholder={t('booking.lastNamePlaceholder')}
                     />
                   </div>
-                  <div>
+                  <div className="yanora-booking-field">
                     <label className="block text-xs font-normal mb-2 tracking-wide" style={{color: '#1F1F1F'}}>
                       {t('booking.firstName')} <span style={{color: '#EF4444'}}>{t('booking.required')}</span>
                     </label>
@@ -305,7 +447,7 @@ function BookingMobile({
                   </div>
                 </div>
 
-                <div>
+                <div className="yanora-booking-field">
                   <label className="block text-xs font-normal mb-2 tracking-wide" style={{color: '#1F1F1F'}}>
                     {t('booking.email')} <span style={{color: '#EF4444'}}>{t('booking.required')}</span>
                   </label>
@@ -321,7 +463,7 @@ function BookingMobile({
                   />
                 </div>
 
-                <div>
+                <div className="yanora-booking-field yanora-booking-phone-field">
                   <label className="block text-xs font-normal mb-2 tracking-wide" style={{color: '#1F1F1F'}}>
                     {t('booking.phone')} <span style={{color: '#EF4444'}}>{t('booking.required')}</span>
                   </label>
@@ -333,7 +475,7 @@ function BookingMobile({
                       style={{borderColor: '#E5E7EB', color: '#1F1F1F', minWidth: '100px'}}
                     >
                       {countryCodes.map((country) => (
-                        <option key={country.code} value={country.code}>
+                        <option key={`${country.code}-${country.name}`} value={country.code}>
                           {country.flag} {country.code}
                         </option>
                       ))}
@@ -350,14 +492,63 @@ function BookingMobile({
                   </div>
                 </div>
 
-                <div className="pt-4">
+                <div className="border rounded-xl p-4 bg-white yanora-booking-price-panel" style={{borderColor: '#DDE6EE'}}>
+                  <div className="flex items-end justify-between mb-3">
+                    <div>
+                      <span className="text-[10px] tracking-[0.22em]" style={{color: '#6F8998'}}>
+                        {language === 'zh' ? '费用预览' : 'PRICE PREVIEW'}
+                      </span>
+                      <h2 className="text-lg font-light mt-1" style={{color: '#1C2B3A'}}>
+                        {language === 'zh' ? '选择分析项目' : 'Choose Analysis'}
+                      </h2>
+                    </div>
+                    <strong className="text-2xl font-light" style={{color: '#1C2B3A'}}>${totalAmount}</strong>
+                  </div>
+                  <div className="space-y-2">
+                    {serviceOptions.map((service) => (
+                      <button
+                        key={service.id}
+                        type="button"
+                        onClick={() => toggleService(service.id)}
+                        className="w-full border rounded-lg p-3 text-left transition flex gap-3 items-start yanora-booking-service-card"
+                        style={{
+                          borderColor: service.selected ? '#1C2B3A' : '#E5E7EB',
+                          backgroundColor: service.selected ? '#F5F8FA' : '#FFFFFF'
+                        }}
+                      >
+                        <span
+                          className="mt-0.5 w-5 h-5 border flex items-center justify-center text-xs"
+                          style={{
+                            borderColor: service.selected ? '#1C2B3A' : '#B9CBDC',
+                            color: service.selected ? '#1C2B3A' : 'transparent'
+                          }}
+                        >
+                          ✓
+                        </span>
+                        <span className="flex-1 min-w-0">
+                          <span className="flex items-center justify-between gap-3">
+                            <span className="text-xs tracking-wide" style={{color: '#1C2B3A'}}>
+                              {language === 'zh' ? service.name : service.nameEn}
+                            </span>
+                            <span className="text-sm font-light" style={{color: '#1C2B3A'}}>${service.price}</span>
+                          </span>
+                          <span className="block mt-1 text-[11px] leading-4" style={{color: '#6B7280'}}>
+                            {language === 'zh' ? service.description : service.descriptionEn}
+                          </span>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-4 yanora-booking-submit-wrap">
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3.5 text-white text-sm font-light transition tracking-wider disabled:opacity-50 rounded-none"
+                    className="w-full py-3.5 text-white text-sm font-light transition tracking-wider disabled:opacity-50 rounded-none yanora-booking-submit"
                     style={{backgroundColor: '#1C2B3A'}}
                   >
-                    {loading ? t('booking.submitting') : t('booking.submit')}
+                    {loading ? t('booking.submitting') : `${t('booking.submit')} · $${totalAmount}`}
                   </button>
                 </div>
               </form>

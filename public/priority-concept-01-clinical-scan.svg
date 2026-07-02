@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" role="img" aria-label="Yanora priority concept clinical scan">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".55" stop-color="#f3f7fa"/>
+      <stop offset="1" stop-color="#e8f0f5"/>
+    </linearGradient>
+    <linearGradient id="dark" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#1C2B3A"/>
+      <stop offset="1" stop-color="#13202D"/>
+    </linearGradient>
+    <radialGradient id="faceGlow" cx="50%" cy="34%" r="54%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".95"/>
+      <stop offset=".55" stop-color="#B9CBDC" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#1C2B3A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1440" height="900" fill="url(#bg)"/>
+  <g opacity=".38" stroke="#DDE5EC" stroke-width="1">
+    <path d="M0 120h1440M0 240h1440M0 360h1440M0 480h1440M0 600h1440M0 720h1440"/>
+    <path d="M120 0v900M240 0v900M360 0v900M480 0v900M600 0v900M720 0v900M840 0v900M960 0v900M1080 0v900M1200 0v900M1320 0v900"/>
+  </g>
+  <text x="96" y="112" fill="#6F8998" font-size="13" letter-spacing="5" font-family="Arial, sans-serif">YANORA PRIORITY SYSTEM</text>
+  <text x="96" y="186" fill="#1C2B3A" font-size="54" font-weight="300" font-family="Arial, sans-serif">真正的问题，</text>
+  <text x="96" y="250" fill="#1C2B3A" font-size="54" font-weight="300" font-family="Arial, sans-serif">往往不是用户以为的问题。</text>
+  <text x="100" y="306" fill="#6B7280" font-size="18" font-family="Arial, sans-serif">先建立面部优先级，再决定项目顺序。</text>
+
+  <g transform="translate(96 374)">
+    <rect width="348" height="250" fill="#ffffff" stroke="#DDE5EC"/>
+    <text x="30" y="46" fill="#6F8998" font-size="12" letter-spacing="4" font-family="Arial, sans-serif">USER REQUEST</text>
+    <text x="30" y="102" fill="#1C2B3A" font-size="34" font-weight="300" font-family="Arial, sans-serif">隆鼻</text>
+    <text x="30" y="154" fill="#1C2B3A" font-size="34" font-weight="300" font-family="Arial, sans-serif">鼻翼缩小</text>
+    <line x1="30" y1="195" x2="318" y2="195" stroke="#DDE5EC"/>
+    <text x="30" y="224" fill="#8B98A8" font-size="13" font-family="Arial, sans-serif">Rhinoplasty / Alar reduction</text>
+  </g>
+
+  <g transform="translate(472 468)">
+    <circle cx="58" cy="58" r="52" fill="none" stroke="#B9CBDC"/>
+    <circle cx="18" cy="58" r="5" fill="#B9CBDC"/>
+    <circle cx="98" cy="58" r="5" fill="#B9CBDC"/>
+    <path d="M40 58h92m0 0-22-16m22 16-22 16" fill="none" stroke="#6F8998" stroke-width="2"/>
+    <text x="15" y="132" fill="#6F8998" font-size="11" letter-spacing="3" font-family="Arial, sans-serif">YANORA READ</text>
+  </g>
+
+  <g transform="translate(650 304)">
+    <rect width="694" height="386" fill="url(#dark)"/>
+    <rect width="694" height="386" fill="url(#faceGlow)"/>
+    <g opacity=".28" stroke="#B9CBDC">
+      <path d="M100 0v386M200 0v386M300 0v386M400 0v386M500 0v386M600 0v386"/>
+      <path d="M0 95h694M0 190h694M0 285h694"/>
+    </g>
+    <path d="M370 78C288 80 226 147 226 246c0 88 62 137 144 137s144-49 144-137C514 147 452 80 370 78Z" fill="none" stroke="#B9CBDC" stroke-width="2" opacity=".52"/>
+    <path d="M274 214h190M322 160v150" stroke="#B9CBDC" opacity=".5"/>
+    <text x="54" y="70" fill="#B9CBDC" font-size="12" letter-spacing="4" font-family="Arial, sans-serif">PRIORITY 01 / STRUCTURE FIRST</text>
+    <text x="54" y="146" fill="#ffffff" font-size="36" font-weight="300" font-family="Arial, sans-serif">先提升眉弓立体度，</text>
+    <text x="54" y="198" fill="#ffffff" font-size="36" font-weight="300" font-family="Arial, sans-serif">再建立面中支撑。</text>
+    <text x="54" y="260" fill="#B9CBDC" font-size="16" font-family="Arial, sans-serif">When brow ridge and midface support are weak, structure comes before nasal refinement.</text>
+  </g>
+
+  <g transform="translate(96 742)">
+    <rect width="38" height="38" fill="#1C2B3A"/>
+    <text x="15" y="25" fill="#fff" font-size="14" font-family="Arial">1</text>
+    <rect x="48" width="38" height="38" fill="#fff" stroke="#B9CBDC"/>
+    <text x="63" y="25" fill="#6F8998" font-size="14" font-family="Arial">2</text>
+    <rect x="96" width="38" height="38" fill="#fff" stroke="#B9CBDC"/>
+    <text x="111" y="25" fill="#6F8998" font-size="14" font-family="Arial">3</text>
+    <line x1="154" y1="19" x2="230" y2="19" stroke="#B9CBDC"/>
+    <line x1="154" y1="19" x2="180" y2="19" stroke="#1C2B3A" stroke-width="3"/>
+  </g>
+</svg>

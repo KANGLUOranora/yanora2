@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1800" role="img" aria-label="Yanora editorial face analysis portrait">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f8fafb"/>
+      <stop offset=".42" stop-color="#e9f0f5"/>
+      <stop offset="1" stop-color="#c9d7e3"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="50%" cy="31%" r="48%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".96"/>
+      <stop offset=".44" stop-color="#d7e3ed" stop-opacity=".78"/>
+      <stop offset="1" stop-color="#9dadbd" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="skin" x1=".22" x2=".82" y1=".1" y2=".95">
+      <stop offset="0" stop-color="#f8e6dc"/>
+      <stop offset=".48" stop-color="#e7c3b5"/>
+      <stop offset="1" stop-color="#b98778"/>
+    </linearGradient>
+    <linearGradient id="skinShade" x1=".18" x2=".86" y1=".05" y2=".94">
+      <stop offset="0" stop-color="#fff6ef" stop-opacity=".9"/>
+      <stop offset=".55" stop-color="#c89485" stop-opacity=".62"/>
+      <stop offset="1" stop-color="#6f4b48" stop-opacity=".58"/>
+    </linearGradient>
+    <linearGradient id="hair" x1=".24" x2=".8" y1=".02" y2=".92">
+      <stop offset="0" stop-color="#273747"/>
+      <stop offset=".45" stop-color="#172432"/>
+      <stop offset="1" stop-color="#0f1924"/>
+    </linearGradient>
+    <linearGradient id="lightSweep" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#ffffff" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="28" stdDeviation="42" flood-color="#1c2b3a" flood-opacity=".18"/>
+    </filter>
+    <filter id="softBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="16"/>
+    </filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 .055"/>
+      </feComponentTransfer>
+      <feBlend mode="soft-light" in2="SourceGraphic"/>
+    </filter>
+    <clipPath id="faceClip">
+      <path d="M704 345C527 347 402 485 385 679c-18 205 78 481 252 580 39 22 96 22 134 0 174-100 270-376 252-580-17-194-142-332-319-334z"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1400" height="1800" fill="url(#bg)"/>
+  <rect width="1400" height="1800" fill="url(#halo)"/>
+  <g opacity=".55">
+    <path d="M100 1550C323 1420 545 1375 766 1414c177 31 331 3 462-84" fill="none" stroke="#ffffff" stroke-width="2"/>
+    <path d="M120 1500C350 1381 568 1353 774 1418c158 50 318 20 480-92" fill="none" stroke="#b9cbdc" stroke-width="1.5" opacity=".5"/>
+  </g>
+
+  <g filter="url(#softBlur)" opacity=".42">
+    <ellipse cx="700" cy="980" rx="410" ry="720" fill="#ffffff"/>
+    <ellipse cx="575" cy="705" rx="230" ry="340" fill="#dbe7f0"/>
+    <ellipse cx="852" cy="705" rx="230" ry="340" fill="#b6c8d8"/>
+  </g>
+
+  <g filter="url(#softShadow)">
+    <path d="M370 1592c35-249 157-396 333-396s297 147 333 396H370z" fill="#203040"/>
+    <path d="M416 1592c28-190 129-295 287-295s258 105 287 295H416z" fill="#ecf2f6" opacity=".36"/>
+
+    <path d="M373 878C308 646 366 370 563 262c83-45 212-53 310 0 200 108 259 384 193 616-58 204-186 330-347 331-160 0-287-127-346-331z" fill="url(#hair)"/>
+    <path d="M430 633c16-166 123-276 276-276 154 0 260 110 276 276 24 256-98 598-276 598S406 889 430 633z" fill="url(#skin)"/>
+    <path d="M430 633c16-166 123-276 276-276 154 0 260 110 276 276 24 256-98 598-276 598S406 889 430 633z" fill="url(#skinShade)" opacity=".58" clip-path="url(#faceClip)"/>
+
+    <path d="M450 548c64-161 187-236 350-218 95 11 171 62 224 153-76-39-143-46-202-21-112 48-227 52-372 86z" fill="#182638"/>
+    <path d="M421 763c-43 7-62 52-47 112 15 62 54 94 88 70M988 763c43 7 62 52 47 112-15 62-54 94-88 70" fill="#dfb3a4"/>
+    <path d="M526 746c58-38 118-39 178-4M744 742c61-35 120-33 176 4" fill="none" stroke="#57413f" stroke-width="10" stroke-linecap="round" opacity=".5"/>
+    <path d="M565 795c38 28 78 28 120 0M778 795c42 28 82 28 120 0" fill="none" stroke="#1c2b3a" stroke-width="6" stroke-linecap="round" opacity=".56"/>
+    <path d="M695 792c-4 83-19 153-47 211 30 28 73 30 112 0-27-61-43-131-48-211" fill="none" stroke="#8a635c" stroke-width="6" stroke-linecap="round" opacity=".45"/>
+    <path d="M608 1076c57 48 137 49 196 0" fill="none" stroke="#815b58" stroke-width="8" stroke-linecap="round" opacity=".62"/>
+    <path d="M585 1122c77 62 167 62 244 0" fill="none" stroke="#fff3ec" stroke-width="5" stroke-linecap="round" opacity=".35"/>
+    <path d="M500 420c-46 169-37 315 27 437 34 66 58 143 73 231-111-74-177-221-205-440-6-50 15-141 105-228z" fill="#142231" opacity=".78"/>
+    <path d="M907 420c46 169 37 315-27 437-34 66-58 143-73 231 111-74 177-221 205-440 6-50-15-141-105-228z" fill="#101b28" opacity=".78"/>
+  </g>
+
+  <g opacity=".34">
+    <rect x="280" y="230" width="840" height="1120" fill="url(#lightSweep)" transform="skewX(-12)"/>
+    <path d="M344 1290c197 98 519 99 718 0" fill="none" stroke="#ffffff" stroke-width="3" opacity=".44"/>
+  </g>
+  <rect width="1400" height="1800" filter="url(#grain)" opacity=".72"/>
+</svg>

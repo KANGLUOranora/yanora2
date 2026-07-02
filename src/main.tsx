@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LanguageProvider } from './contexts/LanguageContext.tsx';
 import { AuthProvider } from './contexts/AuthContext.tsx';
 import { AnalyticsProvider } from './contexts/AnalyticsContext.tsx';
@@ -23,6 +23,7 @@ import CasesPage from './components/CasesPage.tsx';
 import PrivacyPolicyPage from './components/PrivacyPolicyPage.tsx';
 import AfterSalesPage from './components/AfterSalesPage.tsx';
 import CardDemo from './components/CardDemo.tsx';
+import PriorityConceptsPage from './components/PriorityConceptsPage.tsx';
 import ScrollToTop from './components/ScrollToTop.tsx';
 import './index.css';
 
@@ -56,6 +57,8 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="/after-sales" element={<AfterSalesPage />} />
             <Route path="/card-demo" element={<CardDemo />} />
+            <Route path="/priority-concepts" element={<PriorityConceptsPage />} />
+            <Route path="/hospitals" element={<Navigate to="/" replace />} />
             </Routes>
             </AnalyticsProvider>
           </VisitorTrackingProvider>

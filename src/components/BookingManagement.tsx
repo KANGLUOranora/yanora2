@@ -21,12 +21,14 @@ interface Booking {
   consultation_fee: number;
   total_amount: number;
   selected_services: Service[];
+  face_photo_urls?: string[];
   payment_completed_at: string;
   created_at: string;
 }
 
 function BookingManagement() {
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [facePhotoPreviews, setFacePhotoPreviews] = useState<Record<string, string[]>>({});
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed'>('all');
 
@@ -46,6 +48,24 @@ function BookingManagement() {
 
       if (error) throw error;
       setBookings(data || []);
+      const previewEntries = await Promise.all(
+        (data || []).map(async (booking) => {
+          const photoPaths = Array.isArray(booking.face_photo_urls) ? booking.face_photo_urls : [];
+          if (photoPaths.length === 0) return [booking.id, []] as const;
+
+          const urls = await Promise.all(
+            photoPaths.map(async (path: string) => {
+              const { data: signedData } = await supabase.storage
+                .from('booking-face-photos')
+                .createSignedUrl(path, 60 * 60);
+              return signedData?.signedUrl || '';
+            })
+          );
+
+          return [booking.id, urls.filter(Boolean)] as const;
+        })
+      );
+      setFacePhotoPreviews(Object.fromEntries(previewEntries));
     } catch (error) {
       console.error('Error fetching bookings:', error);
     } finally {
@@ -153,6 +173,20 @@ function BookingManagement() {
                 </td>
                 <td className="px-4 py-4">
                   <div className="text-sm" style={{color: '#4B5563'}}>{booking.service_type}</div>
+                  {facePhotoPreviews[booking.id]?.length > 0 && (
+                    <div className="flex gap-1 mt-2">
+                      {facePhotoPreviews[booking.id].map((url, index) => (
+                        <a key={url} href={url} target="_blank" rel="noreferrer" className="block">
+                          <img
+                            src={url}
+                            alt={`face photo ${index + 1}`}
+                            className="w-10 h-10 object-cover border"
+                            style={{borderColor: '#E5E7EB'}}
+                          />
+                        </a>
+                      ))}
+                    </div>
+                  )}
                   {booking.selected_services && booking.selected_services.length > 0 && (
                     <div className="text-xs mt-1" style={{color: '#9CA3AF'}}>
                       +{booking.selected_services.length}个额外服务

@@ -1,5 +1,5 @@
-import { Calendar } from 'lucide-react';
-import { BookingFormData, BookingStep } from '../BookingPage';
+import { ArrowLeft, Calendar } from 'lucide-react';
+import { BookingFlowStep, BookingFormData, BookingServiceOption, BookingStep } from '../BookingPage';
 import { useState } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import Footer from '../Footer';
@@ -9,10 +9,19 @@ interface BookingDesktopProps {
   formData: BookingFormData;
   loading: boolean;
   error: string;
+  flowStep: BookingFlowStep;
   handleSubmit: (e: React.FormEvent) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
   handlePayment: (method: string) => void;
   navigate: (path: string) => void;
+  facePhotos: File[];
+  facePhotoPreviews: string[];
+  handlePhotoChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleContinueToDetails: () => void;
+  handleBackToPhotos: () => void;
+  serviceOptions: BookingServiceOption[];
+  toggleService: (id: string) => void;
+  totalAmount: number;
 }
 
 const countryCodes = [
@@ -196,12 +205,21 @@ function BookingDesktop({
   formData,
   loading,
   error,
+  flowStep,
   handleSubmit,
   handleChange,
   handlePayment,
-  navigate
+  navigate,
+  facePhotos,
+  facePhotoPreviews,
+  handlePhotoChange,
+  handleContinueToDetails,
+  handleBackToPhotos,
+  serviceOptions,
+  toggleService,
+  totalAmount
 }: BookingDesktopProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [countryCode, setCountryCode] = useState('+86');
   const [phoneNumber, setPhoneNumber] = useState('');
 
@@ -230,8 +248,8 @@ function BookingDesktop({
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <nav className="sticky top-0 bg-white z-50 py-6 border-b" style={{borderColor: '#E5E7EB'}}>
+    <div className="min-h-screen bg-white yanora-booking-page yanora-booking-desktop">
+      <nav className="sticky top-0 bg-white z-50 py-6 border-b yanora-booking-nav" style={{borderColor: '#E5E7EB'}}>
         <div className="max-w-7xl mx-auto px-12 flex items-center justify-between">
           <button
             onClick={() => navigate('/')}
@@ -242,14 +260,14 @@ function BookingDesktop({
         </div>
       </nav>
 
-      <section className="py-24 px-12">
-        <div className="max-w-2xl mx-auto">
+      <section className="py-24 px-12 yanora-booking-section">
+        <div className="max-w-4xl mx-auto yanora-booking-shell">
           {step === 'form' && (
             <>
-              <h1 className="text-4xl font-light text-center mb-6 tracking-wide" style={{color: '#1F1F1F'}}>
+              <h1 className="text-4xl font-light text-center mb-6 tracking-wide yanora-booking-title" style={{color: '#1F1F1F'}}>
                 {t('booking.title')}
               </h1>
-              <p className="text-center mb-16 tracking-wide" style={{color: '#6B7280'}}>
+              <p className="text-center mb-16 tracking-wide yanora-booking-subtitle" style={{color: '#6B7280'}}>
                 {t('booking.subtitle')}
               </p>
 
@@ -259,9 +277,138 @@ function BookingDesktop({
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="grid grid-cols-2 gap-6">
-                  <div>
+              <div className={`mb-10 space-y-5 yanora-booking-flow yanora-booking-slider ${flowStep === 'details' ? 'yanora-booking-slider-details' : 'yanora-booking-slider-photos'}`}>
+                <div className="border p-6 yanora-booking-step-card yanora-booking-photo-card" style={{borderColor: '#DDE6EE', backgroundColor: '#F7FAFC'}}>
+                  <div className="flex items-center justify-between mb-5">
+                    <div>
+                      <span className="text-xs tracking-[0.24em]" style={{color: '#6F8998'}}>STEP 01</span>
+                      <h2 className="text-2xl font-light mt-2" style={{color: '#1C2B3A'}}>
+                        {language === 'zh' ? '先上传面部照片' : 'Upload Face Photos First'}
+                      </h2>
+                    </div>
+                    <span className="text-sm" style={{color: '#6F8998'}}>{facePhotos.length}/3</span>
+                  </div>
+                  <label className="block cursor-pointer">
+                    <input type="file" accept="image/*" multiple className="hidden" onChange={handlePhotoChange} />
+                    <div className="grid grid-cols-3 gap-3 yanora-booking-photo-grid">
+                      {[
+                        language === 'zh' ? '正面' : 'Front',
+                        language === 'zh' ? '左 45°' : 'Left 45°',
+                        language === 'zh' ? '右 45°' : 'Right 45°'
+                      ].map((item, index) => (
+                        <div
+                          key={item}
+                          className={`aspect-[4/5] border border-dashed flex flex-col items-center justify-center gap-3 bg-white yanora-booking-photo-slot${facePhotoPreviews[index] ? ' yanora-booking-photo-slot-filled' : ''}`}
+                          style={{borderColor: index < facePhotos.length ? '#1C2B3A' : '#B9CBDC'}}
+                        >
+                          {facePhotoPreviews[index] ? (
+                            <img src={facePhotoPreviews[index]} alt={item} className="yanora-booking-photo-preview" />
+                          ) : (
+                            <span className="w-12 h-12 rounded-full border flex items-center justify-center text-xl font-light" style={{borderColor: '#B9CBDC', color: '#6F8998'}}>
+                              +
+                            </span>
+                          )}
+                          <span className="text-xs tracking-wide" style={{color: '#1C2B3A'}}>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </label>
+                  <p className="mt-4 text-sm leading-7" style={{color: '#5D6D7E'}}>
+                    {language === 'zh'
+                      ? '建议上传正面、左 45°、右 45° 三张照片，方便团队先判断比例、支撑和轮廓转折。'
+                      : 'Upload front, left 45°, and right 45° photos so the team can read proportion, support, and contour transitions first.'}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleContinueToDetails}
+                  disabled={facePhotos.length < 3}
+                  className="w-full py-3 text-white text-sm font-light tracking-wider disabled:opacity-40 yanora-booking-primary-action"
+                  style={{backgroundColor: '#1C2B3A'}}
+                >
+                  {language === 'zh' ? '完成照片上传，继续填写信息' : 'Continue to Information'}
+                </button>
+
+                <div className="border p-6 bg-white yanora-booking-price-panel" style={{borderColor: '#DDE6EE'}}>
+                  <div className="flex items-end justify-between mb-5">
+                    <div>
+                      <span className="text-xs tracking-[0.24em]" style={{color: '#6F8998'}}>
+                        {language === 'zh' ? '费用预览' : 'PRICE PREVIEW'}
+                      </span>
+                      <h2 className="text-2xl font-light mt-2" style={{color: '#1C2B3A'}}>
+                        {language === 'zh' ? '选择你的分析项目' : 'Choose Your Analysis'}
+                      </h2>
+                    </div>
+                    <div className="text-right">
+                      <span className="block text-xs tracking-wide" style={{color: '#6B7280'}}>
+                        {language === 'zh' ? '当前合计' : 'Total'}
+                      </span>
+                      <strong className="text-3xl font-light" style={{color: '#1C2B3A'}}>${totalAmount}</strong>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    {serviceOptions.map((service) => (
+                      <button
+                        key={service.id}
+                        type="button"
+                        onClick={() => toggleService(service.id)}
+                        className="w-full border p-4 text-left transition flex gap-4 items-start yanora-booking-service-card"
+                        style={{
+                          borderColor: service.selected ? '#1C2B3A' : '#E5E7EB',
+                          backgroundColor: service.selected ? '#F5F8FA' : '#FFFFFF'
+                        }}
+                      >
+                        <span
+                          className="mt-1 w-5 h-5 border flex items-center justify-center text-xs"
+                          style={{
+                            borderColor: service.selected ? '#1C2B3A' : '#B9CBDC',
+                            color: service.selected ? '#1C2B3A' : 'transparent'
+                          }}
+                        >
+                          ✓
+                        </span>
+                        <span className="flex-1">
+                          <span className="flex items-center justify-between gap-4">
+                            <span className="text-sm tracking-wide" style={{color: '#1C2B3A'}}>
+                              {language === 'zh' ? service.name : service.nameEn}
+                            </span>
+                            <span className="text-lg font-light" style={{color: '#1C2B3A'}}>${service.price}</span>
+                          </span>
+                          <span className="block mt-1 text-xs leading-5" style={{color: '#6B7280'}}>
+                            {language === 'zh' ? service.description : service.descriptionEn}
+                          </span>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-2 yanora-booking-step-heading-hidden" style={{display: flowStep === 'details' ? 'block' : 'none'}}>
+                  <span className="text-xs tracking-[0.24em]" style={{color: '#6F8998'}}>STEP 02</span>
+                  <h2 className="text-2xl font-light mt-2" style={{color: '#1C2B3A'}}>
+                    {language === 'zh' ? '填写联系信息' : 'Fill In Your Information'}
+                  </h2>
+                </div>
+              </div>
+
+              <form onSubmit={handleSubmit} className={flowStep === 'details' ? 'space-y-8 yanora-booking-form-card yanora-booking-slide-form' : 'hidden'}>
+                <button
+                  type="button"
+                  onClick={handleBackToPhotos}
+                  className="yanora-booking-back-button"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  {language === 'zh' ? '返回上传照片' : 'Back to Photos'}
+                </button>
+                <div className="mb-2 yanora-booking-details-head">
+                  <span className="text-xs tracking-[0.24em]" style={{color: '#6F8998'}}>STEP 02</span>
+                  <h2 className="text-2xl font-light mt-2" style={{color: '#1C2B3A'}}>
+                    {language === 'zh' ? '填写联系信息' : 'Fill In Your Information'}
+                  </h2>
+                </div>
+                <div className="grid grid-cols-2 gap-6 yanora-booking-details-name-grid">
+                  <div className="yanora-booking-field">
                     <label className="block text-sm font-normal mb-3 tracking-wide" style={{color: '#1F1F1F'}}>
                       {t('booking.lastName')} <span style={{color: '#EF4444'}}>{t('booking.required')}</span>
                     </label>
@@ -276,7 +423,7 @@ function BookingDesktop({
                       placeholder={t('booking.lastNamePlaceholder')}
                     />
                   </div>
-                  <div>
+                  <div className="yanora-booking-field">
                     <label className="block text-sm font-normal mb-3 tracking-wide" style={{color: '#1F1F1F'}}>
                       {t('booking.firstName')} <span style={{color: '#EF4444'}}>{t('booking.required')}</span>
                     </label>
@@ -293,7 +440,7 @@ function BookingDesktop({
                   </div>
                 </div>
 
-                <div>
+                <div className="yanora-booking-field">
                   <label className="block text-sm font-normal mb-3 tracking-wide" style={{color: '#1F1F1F'}}>
                     {t('booking.email')} <span style={{color: '#EF4444'}}>{t('booking.required')}</span>
                   </label>
@@ -309,7 +456,7 @@ function BookingDesktop({
                   />
                 </div>
 
-                <div>
+                <div className="yanora-booking-field yanora-booking-phone-field">
                   <label className="block text-sm font-normal mb-3 tracking-wide" style={{color: '#1F1F1F'}}>
                     {t('booking.phone')} <span style={{color: '#EF4444'}}>{t('booking.required')}</span>
                   </label>
@@ -321,7 +468,7 @@ function BookingDesktop({
                       style={{borderColor: '#D1D5DB', color: '#1F1F1F', minWidth: '150px'}}
                     >
                       {countryCodes.map((country) => (
-                        <option key={country.code} value={country.code}>
+                        <option key={`${country.code}-${country.name}`} value={country.code}>
                           {country.flag} {country.code}
                         </option>
                       ))}
@@ -338,14 +485,68 @@ function BookingDesktop({
                   </div>
                 </div>
 
-                <div className="pt-8">
+                <div className="border p-6 bg-white yanora-booking-price-panel" style={{borderColor: '#DDE6EE'}}>
+                  <div className="flex items-end justify-between mb-5">
+                    <div>
+                      <span className="text-xs tracking-[0.24em]" style={{color: '#6F8998'}}>
+                        {language === 'zh' ? '费用预览' : 'PRICE PREVIEW'}
+                      </span>
+                      <h2 className="text-2xl font-light mt-2" style={{color: '#1C2B3A'}}>
+                        {language === 'zh' ? '选择你的分析项目' : 'Choose Your Analysis'}
+                      </h2>
+                    </div>
+                    <div className="text-right">
+                      <span className="block text-xs tracking-wide" style={{color: '#6B7280'}}>
+                        {language === 'zh' ? '当前合计' : 'Total'}
+                      </span>
+                      <strong className="text-3xl font-light" style={{color: '#1C2B3A'}}>${totalAmount}</strong>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    {serviceOptions.map((service) => (
+                      <button
+                        key={service.id}
+                        type="button"
+                        onClick={() => toggleService(service.id)}
+                        className="w-full border p-4 text-left transition flex gap-4 items-start yanora-booking-service-card"
+                        style={{
+                          borderColor: service.selected ? '#1C2B3A' : '#E5E7EB',
+                          backgroundColor: service.selected ? '#F5F8FA' : '#FFFFFF'
+                        }}
+                      >
+                        <span
+                          className="mt-1 w-5 h-5 border flex items-center justify-center text-xs"
+                          style={{
+                            borderColor: service.selected ? '#1C2B3A' : '#B9CBDC',
+                            color: service.selected ? '#1C2B3A' : 'transparent'
+                          }}
+                        >
+                          ✓
+                        </span>
+                        <span className="flex-1">
+                          <span className="flex items-center justify-between gap-4">
+                            <span className="text-sm tracking-wide" style={{color: '#1C2B3A'}}>
+                              {language === 'zh' ? service.name : service.nameEn}
+                            </span>
+                            <span className="text-lg font-light" style={{color: '#1C2B3A'}}>${service.price}</span>
+                          </span>
+                          <span className="block mt-1 text-xs leading-5" style={{color: '#6B7280'}}>
+                            {language === 'zh' ? service.description : service.descriptionEn}
+                          </span>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-8 yanora-booking-submit-wrap">
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-4 text-white text-sm font-light transition tracking-wider disabled:opacity-50 rounded-none"
+                    className="w-full py-4 text-white text-sm font-light transition tracking-wider disabled:opacity-50 rounded-none yanora-booking-submit"
                     style={{backgroundColor: '#1C2B3A'}}
                   >
-                    {loading ? t('booking.submitting') : t('booking.submit')}
+                    {loading ? t('booking.submitting') : `${t('booking.submit')} · $${totalAmount}`}
                   </button>
                 </div>
 
