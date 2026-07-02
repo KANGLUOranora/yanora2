@@ -9175,3 +9175,29 @@
     min-height: 18rem;
   }
 }
+
+/* Booking page: keep the appointment flow background clean and flat. */
+.yanora-booking-page,
+.yanora-booking-section {
+  background: #F7FAFC !important;
+  background-image: none !important;
+}
+
+.yanora-booking-step-card,
+.yanora-booking-photo-card,
+.yanora-booking-price-panel,
+.yanora-booking-form-card,
+.yanora-booking-details-head,
+.yanora-booking-field {
+  background: #FFFFFF !important;
+  background-image: none !important;
+}
+
+.yanora-booking-photo-slot {
+  background: #F7FAFC !important;
+  background-image: none !important;
+}
+
+.yanora-booking-photo-slot::after {
+  background: rgba(255, 255, 255, 0.7) !important;
+}
